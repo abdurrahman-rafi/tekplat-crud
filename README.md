@@ -51,7 +51,3 @@ Catatan:
 - [docs/PANDUAN-DEPLOYMENT-AAPANEL.md](docs/PANDUAN-DEPLOYMENT-AAPANEL.md)
 - [docs/MISI-DAN-ENDGOAL.md](docs/MISI-DAN-ENDGOAL.md)
 - [docs/REFERENSI-AAPANEL.md](docs/REFERENSI-AAPANEL.md)
-
-## Catatan
-
-Antarmuka frontend akan dipakai untuk operasi CRUD mahasiswa. Tugas utama mereka bukan membangun UI, tetapi memastikan aplikasi berjalan dan seluruh CRUD tersimpan ke database aaPanel.

@@ -1,0 +1,44 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">Dashboard</p>
+        <h2>Daftar User</h2>
+        <p class="page-subtitle">Kelola data user dari database aaPanel melalui antarmuka web yang sederhana dan rapi.</p>
+    </div>
+    <a href="/users/new" class="btn btn-primary">Tambah User</a>
+</div>
+
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Users}}
+                <tr>
+                    <td class="text-muted">{{.ID}}</td>
+                    <td class="font-medium">{{.Nama}}</td>
+                    <td class="text-muted">{{.Email}}</td>
+                    <td class="actions">
+                        <a href="/users/{{.ID}}/edit" class="btn btn-secondary btn-sm">Edit</a>
+                        <form action="/users/{{.ID}}/delete" method="POST" class="inline-form" onsubmit="return confirm('Hapus user ini?');">
+                            <button type="submit" class="btn btn-secondary btn-sm btn-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="4" class="text-center text-muted empty-state">Belum ada user yang terdaftar.</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

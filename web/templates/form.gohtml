@@ -1,0 +1,42 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">Form</p>
+        <h2>{{if eq .Form.Mode "create"}}Tambah User{{else}}Edit User{{end}}</h2>
+        <p class="page-subtitle">Simpan perubahan langsung ke database yang terhubung dengan aplikasi Go.</p>
+    </div>
+    <a href="/users" class="btn btn-secondary">Kembali</a>
+</div>
+
+<div class="form-container">
+    <div class="card form-card">
+        <form action="{{.Form.Action}}" method="POST">
+            <div class="form-group">
+                <label for="nama">Nama Lengkap</label>
+                <input type="text" id="nama" name="nama" value="{{.Form.User.Nama}}"
+                       class="form-control {{if .Form.Errors.nama}}is-invalid{{end}}"
+                       placeholder="Masukkan nama lengkap">
+                {{if .Form.Errors.nama}}
+                    <div class="invalid-feedback">{{.Form.Errors.nama}}</div>
+                {{end}}
+            </div>
+
+            <div class="form-group">
+                <label for="email">Alamat Email</label>
+                <input type="email" id="email" name="email" value="{{.Form.User.Email}}"
+                       class="form-control {{if .Form.Errors.email}}is-invalid{{end}}"
+                       placeholder="user@example.com">
+                {{if .Form.Errors.email}}
+                    <div class="invalid-feedback">{{.Form.Errors.email}}</div>
+                {{end}}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {{if eq .Form.Mode "create"}}Simpan User{{else}}Perbarui User{{end}}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

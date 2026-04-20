@@ -45,6 +45,7 @@ go run ./cmd/web
 
 Catatan:
 - Aplikasi akan otomatis membaca file `.env` jika file tersebut ada di root project.
+- Jika port `8080` sedang dipakai service lain, ganti `APP_ADDR` di `.env`, misalnya menjadi `:8090`.
 
 ## Dokumen penting
 

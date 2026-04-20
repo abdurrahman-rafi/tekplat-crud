@@ -118,6 +118,7 @@ DB_PASSWORD=password_yang_dibuat_di_aapanel
 Catatan:
 - Jika database berada pada host berbeda, ganti `DB_HOST`.
 - Jika port database bukan `3306`, sesuaikan `DB_PORT`.
+- Jika port aplikasi `8080` sedang dipakai service lain pada mesin lokal, ganti `APP_ADDR`, misalnya menjadi `:8090`.
 
 ## Langkah 4 - Install dependency dan jalankan aplikasi
 
@@ -240,6 +241,12 @@ mysqldump -u crud_user -p crud_db > nim_nama_crud_db.sql
 ```
 
 File inilah yang nantinya dikumpulkan bersama screenshot.
+
+Jika client `mysqldump` menampilkan error terkait privilege `PROCESS` atau tablespaces, gunakan:
+
+```bash
+mysqldump --no-tablespaces -u crud_user -p crud_db > nim_nama_crud_db.sql
+```
 
 ## Langkah 10 - Siapkan submission
 

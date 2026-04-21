@@ -9,8 +9,7 @@
 5. Screenshot bukti operasi Update, dengan format nama `nim_nama_BuktiUpdate.jpg`.
 6. Screenshot bukti operasi Delete, dengan format nama `nim_nama_BuktiDelete.jpg`.
 7. File SQL dump hasil akhir database, dengan format nama `nim_nama_crud_db.sql`.
-8. 
-9. Semua bukti di-*compile* pada satu file zip, dengan format nama `nim_nama_TugasCRUD-Go.zip`
+8. Semua bukti di-*compile* pada satu file zip, dengan format nama `nim_nama_TugasCRUD-Go.zip`
 
 ## Catatan
 

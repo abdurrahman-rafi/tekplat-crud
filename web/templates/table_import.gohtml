@@ -1,0 +1,31 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">Database</p>
+        <h2>Import CSV &rarr; <code>{{.TableName}}</code></h2>
+        <p class="page-subtitle">Baris pertama CSV harus berisi nama kolom yang sesuai dengan tabel.</p>
+    </div>
+    <a href="/tables" class="btn btn-secondary">Kembali</a>
+</div>
+
+<div class="form-container">
+    <div class="card form-card">
+        {{if .Columns}}
+        <p class="text-muted" style="margin-bottom:1.5rem;font-size:0.875rem">
+            <strong>Kolom tabel:</strong>
+            {{range $i, $c := .Columns}}{{if $i}}, {{end}}<code>{{$c}}</code>{{end}}
+        </p>
+        {{end}}
+        <form action="/tables/{{.TableName}}/import" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="csv_file">File CSV</label>
+                <input type="file" id="csv_file" name="csv_file" class="form-control" accept=".csv" required>
+                <small class="form-hint">Baris pertama = nama kolom, baris berikutnya = data. Maks 10 MB.</small>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Import</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

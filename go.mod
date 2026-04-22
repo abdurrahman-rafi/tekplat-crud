@@ -1,6 +1,8 @@
 module tekplat-crud
 
-go 1.25.5
+go 1.21.0
+
+toolchain go1.21.13
 
 require (
 	github.com/go-sql-driver/mysql v1.9.3

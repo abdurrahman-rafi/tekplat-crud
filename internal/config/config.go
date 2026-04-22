@@ -6,22 +6,26 @@ import (
 )
 
 type Config struct {
-	AppAddr    string
-	DBHost     string
-	DBPort     string
-	DBName     string
-	DBUser     string
-	DBPassword string
+	AppAddr      string
+	DBHost       string
+	DBPort       string
+	DBName       string
+	DBUser       string
+	DBPassword   string
+	AuthUser     string
+	AuthPassword string
 }
 
 func Load() Config {
 	return Config{
-		AppAddr:    getEnv("APP_ADDR", ":8080"),
-		DBHost:     getEnv("DB_HOST", "127.0.0.1"),
-		DBPort:     getEnv("DB_PORT", "3306"),
-		DBName:     getEnv("DB_NAME", "crud_db"),
-		DBUser:     getEnv("DB_USER", "crud_user"),
-		DBPassword: getEnv("DB_PASSWORD", ""),
+		AppAddr:      getEnv("APP_ADDR", ":8080"),
+		DBHost:       getEnv("DB_HOST", "127.0.0.1"),
+		DBPort:       getEnv("DB_PORT", "3306"),
+		DBName:       getEnv("DB_NAME", "crud_db"),
+		DBUser:       getEnv("DB_USER", "root"),
+		DBPassword:   getEnv("DB_PASSWORD", "hastur"),
+		AuthUser:     getEnv("AUTH_USER", "admin"),
+		AuthPassword: getEnv("AUTH_PASSWORD", ""),
 	}
 }
 

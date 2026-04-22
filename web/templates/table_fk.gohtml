@@ -1,0 +1,45 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">{{.TableName}}</p>
+        <h2>Tambah Foreign Key</h2>
+        <p class="page-subtitle">Hubungkan kolom di tabel ini ke primary key tabel lain.</p>
+    </div>
+    <a href="/tables" class="btn btn-secondary">Kembali</a>
+</div>
+
+<div class="form-container">
+    <div class="card form-card">
+        <form action="/tables/{{.TableName}}/fk" method="POST">
+            <div class="form-group">
+                <label for="fk_col">Kolom di <strong>{{.TableName}}</strong></label>
+                <select id="fk_col" name="column" class="form-control" required>
+                    <option value="">— pilih kolom —</option>
+                    {{range .ColumnNames}}<option value="{{.}}">{{.}}</option>{{end}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fk_ref_table">Tabel referensi</label>
+                <select id="fk_ref_table" name="ref_table" class="form-control" required onchange="updateRefCol(this)">
+                    <option value="">— pilih tabel —</option>
+                    {{range .AllTables}}<option value="{{.}}">{{.}}</option>{{end}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fk_ref_col">Kolom referensi</label>
+                <input type="text" id="fk_ref_col" name="ref_col" class="form-control" value="id" required>
+                <small class="form-hint">Biasanya <code>id</code> — primary key tabel referensi.</small>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Tambah FK</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function updateRefCol(sel) {
+    document.getElementById('fk_ref_col').value = sel.value ? 'id' : '';
+}
+</script>
+{{end}}

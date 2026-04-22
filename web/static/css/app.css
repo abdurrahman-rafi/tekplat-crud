@@ -283,6 +283,81 @@ label {
     text-align: center;
 }
 
+/* Header nav */
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--text-main);
+}
+
+/* Login */
+.login-wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: 4rem;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-header {
+    margin-bottom: 1.75rem;
+}
+
+.login-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+/* Column row (create table form) */
+.column-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.column-row .form-control {
+    flex: 1;
+}
+
+.column-row select.form-control {
+    flex: 0 0 160px;
+}
+
+.column-row .col-remove {
+    flex-shrink: 0;
+}
+
+/* Misc */
+.form-hint {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
 /* Responsive */
 @media (max-width: 640px) {
     .page-header {

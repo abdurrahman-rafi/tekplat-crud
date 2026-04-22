@@ -1,0 +1,169 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">Database</p>
+        <h2>Buat Tabel Baru</h2>
+        <p class="page-subtitle">Kolom <code>id</code> AUTO_INCREMENT ditambahkan otomatis.</p>
+    </div>
+    <a href="/tables" class="btn btn-secondary">Kembali</a>
+</div>
+
+<div class="form-container" style="max-width:760px">
+    <div class="card form-card">
+        <form action="/tables" method="POST" id="create-table-form">
+            <div class="form-group">
+                <label for="table_name">Nama Tabel</label>
+                <input type="text" id="table_name" name="table_name" class="form-control"
+                       placeholder="contoh: products" pattern="[a-zA-Z_][a-zA-Z0-9_]*" required>
+                <small class="form-hint">Huruf, angka, underscore. Diawali huruf atau underscore.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Kolom</label>
+                <div id="columns-list">
+                    <div class="column-row">
+                        <input type="text" name="col_name[]" class="form-control col-name" placeholder="nama_kolom"
+                               pattern="[a-zA-Z_][a-zA-Z0-9_]*" required>
+                        <select name="col_base[]" class="form-control col-base" onchange="onTypeChange(this)">
+                            {{template "typeOptions" .}}
+                        </select>
+                        <input type="number" name="col_len[]" class="form-control col-param col-len" placeholder="255" min="1" max="65535" style="display:none;max-width:80px">
+                        <input type="number" name="col_prec[]" class="form-control col-param col-prec" placeholder="10" min="1" max="65" style="display:none;max-width:70px">
+                        <input type="number" name="col_scale[]" class="form-control col-param col-scale" placeholder="2" min="0" max="30" style="display:none;max-width:65px">
+                        <input type="hidden" name="col_type[]" class="col-type" value="VARCHAR(255)">
+                        <select name="col_ref[]" class="form-control col-ref" style="max-width:160px">
+                            <option value="">— FK (opsional) —</option>
+                            {{range $.AllTables}}<option value="{{.}}.id">{{.}} → id</option>{{end}}
+                        </select>
+                        <button type="button" class="btn btn-secondary btn-sm btn-danger col-remove" onclick="removeColumn(this)" disabled>✕</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" style="margin-top:8px" onclick="addColumn()">+ Tambah Kolom</button>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Buat Tabel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const allTables = {{if .AllTables}}[{{range $i,$t := .AllTables}}{{if $i}},{{end}}"{{$t}}"{{end}}]{{else}}[]{{end}};
+
+function fkOptions() {
+    let s = '<option value="">— FK (opsional) —</option>';
+    allTables.forEach(t => { s += `<option value="${t}.id">${t} → id</option>`; });
+    return s;
+}
+
+function typeOptionsHTML() {
+    return `
+        <option value="VARCHAR">VARCHAR</option>
+        <option value="CHAR">CHAR</option>
+        <option value="INT">INT</option>
+        <option value="BIGINT">BIGINT</option>
+        <option value="FLOAT">FLOAT</option>
+        <option value="DECIMAL">DECIMAL</option>
+        <option value="TEXT">TEXT</option>
+        <option value="DATE">DATE</option>
+        <option value="DATETIME">DATETIME</option>
+        <option value="TIMESTAMP">TIMESTAMP</option>
+        <option value="BOOLEAN">BOOLEAN</option>
+        <option value="JSON">JSON</option>`;
+}
+
+function onTypeChange(sel) {
+    const row = sel.closest('.column-row');
+    const base = sel.value;
+    const len  = row.querySelector('.col-len');
+    const prec = row.querySelector('.col-prec');
+    const scale= row.querySelector('.col-scale');
+    const hidden = row.querySelector('.col-type');
+
+    len.style.display   = (base === 'VARCHAR' || base === 'CHAR') ? '' : 'none';
+    prec.style.display  = base === 'DECIMAL' ? '' : 'none';
+    scale.style.display = base === 'DECIMAL' ? '' : 'none';
+
+    // set sensible defaults
+    if (base === 'VARCHAR' && !len.value) len.value = 255;
+    if (base === 'CHAR'    && !len.value) len.value = 10;
+    if (base === 'DECIMAL') { if (!prec.value) prec.value = 10; if (!scale.value) scale.value = 2; }
+
+    computeType(row);
+}
+
+function computeType(row) {
+    const base  = row.querySelector('.col-base').value;
+    const len   = row.querySelector('.col-len').value;
+    const prec  = row.querySelector('.col-prec').value;
+    const scale = row.querySelector('.col-scale').value;
+    const hidden = row.querySelector('.col-type');
+
+    if (base === 'VARCHAR' || base === 'CHAR') {
+        hidden.value = `${base}(${len || 255})`;
+    } else if (base === 'DECIMAL') {
+        hidden.value = `DECIMAL(${prec || 10},${scale || 2})`;
+    } else {
+        hidden.value = base;
+    }
+}
+
+// recompute col-type on param input changes
+document.addEventListener('input', e => {
+    if (e.target.matches('.col-len, .col-prec, .col-scale')) {
+        computeType(e.target.closest('.column-row'));
+    }
+});
+
+// initialize first row
+document.querySelectorAll('.col-base').forEach(onTypeChange);
+
+function addColumn() {
+    const list = document.getElementById('columns-list');
+    const row = document.createElement('div');
+    row.className = 'column-row';
+    row.innerHTML = `
+        <input type="text" name="col_name[]" class="form-control col-name" placeholder="nama_kolom" pattern="[a-zA-Z_][a-zA-Z0-9_]*" required>
+        <select name="col_base[]" class="form-control col-base" onchange="onTypeChange(this)">${typeOptionsHTML()}</select>
+        <input type="number" name="col_len[]" class="form-control col-param col-len" placeholder="255" min="1" max="65535" style="display:none;max-width:80px">
+        <input type="number" name="col_prec[]" class="form-control col-param col-prec" placeholder="10" min="1" max="65" style="display:none;max-width:70px">
+        <input type="number" name="col_scale[]" class="form-control col-param col-scale" placeholder="2" min="0" max="30" style="display:none;max-width:65px">
+        <input type="hidden" name="col_type[]" class="col-type" value="VARCHAR(255)">
+        <select name="col_ref[]" class="form-control col-ref" style="max-width:160px">${fkOptions()}</select>
+        <button type="button" class="btn btn-secondary btn-sm btn-danger col-remove" onclick="removeColumn(this)">✕</button>`;
+    list.appendChild(row);
+    syncRemoveButtons();
+}
+
+function removeColumn(btn) {
+    btn.closest('.column-row').remove();
+    syncRemoveButtons();
+}
+
+function syncRemoveButtons() {
+    const btns = document.querySelectorAll('.col-remove');
+    btns.forEach(b => b.disabled = btns.length === 1);
+}
+
+// final type computation before submit
+document.getElementById('create-table-form').addEventListener('submit', () => {
+    document.querySelectorAll('.column-row').forEach(computeType);
+});
+</script>
+{{end}}
+
+{{define "typeOptions"}}
+<option value="VARCHAR">VARCHAR</option>
+<option value="CHAR">CHAR</option>
+<option value="INT">INT</option>
+<option value="BIGINT">BIGINT</option>
+<option value="FLOAT">FLOAT</option>
+<option value="DECIMAL">DECIMAL</option>
+<option value="TEXT">TEXT</option>
+<option value="DATE">DATE</option>
+<option value="DATETIME">DATETIME</option>
+<option value="TIMESTAMP">TIMESTAMP</option>
+<option value="BOOLEAN">BOOLEAN</option>
+<option value="JSON">JSON</option>
+{{end}}

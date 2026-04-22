@@ -30,7 +30,8 @@ func main() {
 	defer db.Close()
 
 	userStore := store.NewUserStore(db)
-	app := web.NewApp(cfg, userStore)
+	tableStore := store.NewTableStore(db)
+	app := web.NewApp(cfg, userStore, tableStore)
 
 	server := &http.Server{
 		Addr:         cfg.AppAddr,

@@ -1,0 +1,45 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">Tabel</p>
+        <h2>{{.TableName}}</h2>
+        <p class="page-subtitle">{{len .Rows}} baris ditampilkan (maks 200).</p>
+    </div>
+    <div style="display:flex;gap:0.5rem">
+        <a href="/tables/{{.TableName}}/rows/new" class="btn btn-primary">+ Tambah Baris</a>
+        <a href="/tables" class="btn btn-secondary">Kembali</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    {{range .ColumnNames}}<th>{{.}}</th>{{end}}
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{$table := .TableName}}
+                {{range $i, $row := .Rows}}
+                <tr>
+                    {{range $row}}<td>{{.}}</td>{{end}}
+                    <td class="actions">
+                        <a href="/tables/{{$table}}/rows/{{index $row 0}}/edit" class="btn btn-secondary btn-sm">Edit</a>
+                        <form action="/tables/{{$table}}/rows/{{index $row 0}}/delete" method="POST" class="inline-form"
+                              onsubmit="return confirm('Hapus baris ini?');">
+                            <button type="submit" class="btn btn-secondary btn-sm btn-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="{{len $.ColumnNames}}" class="text-center text-muted empty-state">Tabel ini kosong.</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

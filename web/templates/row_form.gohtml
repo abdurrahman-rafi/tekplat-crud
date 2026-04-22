@@ -1,0 +1,29 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">{{.TableName}}</p>
+        <h2>{{if .RowID}}Edit Baris #{{.RowID}}{{else}}Tambah Baris{{end}}</h2>
+    </div>
+    <a href="/tables/{{.TableName}}/rows" class="btn btn-secondary">Kembali</a>
+</div>
+
+<div class="form-container">
+    <div class="card form-card">
+        <form action="{{if .RowID}}/tables/{{.TableName}}/rows/{{.RowID}}/update{{else}}/tables/{{.TableName}}/rows{{end}}" method="POST">
+            {{range $i, $col := .ColumnNames}}
+            <div class="form-group">
+                <label for="field_{{$col}}">{{$col}}</label>
+                <input type="text" id="field_{{$col}}" name="{{$col}}" class="form-control"
+                       value="{{if $.RowValues}}{{index $.RowValues $i}}{{end}}"
+                       placeholder="{{$col}}">
+            </div>
+            {{end}}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {{if .RowID}}Perbarui{{else}}Simpan{{end}}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

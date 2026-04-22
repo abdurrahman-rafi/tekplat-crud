@@ -1,0 +1,42 @@
+{{define "content"}}
+<div class="page-header">
+    <div class="page-header-copy">
+        <p class="page-kicker">Database</p>
+        <h2>Daftar Tabel</h2>
+        <p class="page-subtitle">Buat, hapus, edit baris, atau import data ke tabel di database.</p>
+    </div>
+    <a href="/tables/new" class="btn btn-primary">Buat Tabel</a>
+</div>
+
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Tabel</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Tables}}
+                <tr>
+                    <td class="font-medium">{{.}}</td>
+                    <td class="actions">
+                        <a href="/tables/{{.}}/rows" class="btn btn-secondary btn-sm">Baris</a>
+                        <a href="/tables/{{.}}/import" class="btn btn-secondary btn-sm">Import CSV</a>
+                        <a href="/tables/{{.}}/fk/new" class="btn btn-secondary btn-sm">+ FK</a>
+                        <form action="/tables/{{.}}/delete" method="POST" class="inline-form" onsubmit="return confirm('Hapus tabel ini? Semua data akan hilang!');">
+                            <button type="submit" class="btn btn-secondary btn-sm btn-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="2" class="text-center text-muted empty-state">Belum ada tabel di database ini.</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}
